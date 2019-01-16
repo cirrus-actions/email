@@ -12,5 +12,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	if spec.MailPort == 0 {
+		spec.MailPort = 587
+	}
 	internal.SendNotification(spec)
 }

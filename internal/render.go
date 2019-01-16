@@ -2,6 +2,7 @@ package internal
 
 import (
 	"bytes"
+	"strings"
 	"text/template"
 )
 
@@ -13,7 +14,7 @@ func Render(text string, data interface{}) (string, error) {
 	var result bytes.Buffer
 	err = tmpl.Execute(&result, data)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
-	return result.String(), nil
+	return strings.TrimSpace(result.String()), nil
 }

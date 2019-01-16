@@ -1,11 +1,9 @@
-FROM golang:alpine
-
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
+FROM golang:stretch
 
 WORKDIR /tmp/build
 ADD . /tmp/build
 
-RUN go get -v ./... && \
+RUN CGO_ENABLED=0 \
+    go get -v ./... && \
     go test -v ./... && \
-    go build ./cmd/
+    go build -o build/email ./cmd/

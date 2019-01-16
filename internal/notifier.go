@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"gopkg.in/gomail.v2"
 	"log"
 )
@@ -8,11 +9,10 @@ import (
 type Specification struct {
 	EventPath    string `envconfig:"GITHUB_EVENT_PATH",required:"true"`
 	MailHost     string `envconfig:"MAIL_HOST",required:"true"`
-	MailPort     int    `envconfig:"MAIL_PORT",default:"587"`
+	MailPort     int    `envconfig:"MAIL_PORT"`
 	MailFrom     string `envconfig:"MAIL_FROM",required:"true"`
 	MailUsername string `envconfig:"MAIL_USERNAME",required:"true"`
 	MailPassword string `envconfig:"MAIL_PASSWORD",required:"true"`
-	GitHubToken  string `envconfig:"GITHUB_TOKEN"`
 }
 
 func SendNotification(spec Specification) {
@@ -21,6 +21,7 @@ func SendNotification(spec Specification) {
 		log.Fatalf("Failed to parse event! %s", err)
 	}
 
+	fmt.Printf("Dialing %v:%v...\n", spec.MailHost, spec.MailPort)
 	var dialer *gomail.Dialer
 	if spec.MailUsername == "" && spec.MailPassword == "" {
 		dialer = &gomail.Dialer{Host: spec.MailHost, Port: spec.MailPort}

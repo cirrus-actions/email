@@ -12,6 +12,7 @@ func generateEmail(spec Specification, event github.CheckSuiteEvent, commit gith
 
 	message.SetAddressHeader("From", spec.MailFrom, *event.CheckSuite.App.Name)
 	message.SetAddressHeader("To", *commit.Committer.Email, *commit.Committer.Name)
+	fmt.Printf("Creating email for %v <%v>...\n", *commit.Committer.Name, *commit.Committer.Email)
 
 	// populate subject:
 	subject, err := Render(DefaultSubjectTemplate, event)

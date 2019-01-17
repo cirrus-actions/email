@@ -7,19 +7,25 @@ import (
 )
 
 type Specification struct {
-	EventPath    string `envconfig:"GITHUB_EVENT_PATH",required:"true"`
-	MailHost     string `envconfig:"MAIL_HOST",required:"true"`
-	MailPort     int    `envconfig:"MAIL_PORT"`
-	MailFrom     string `envconfig:"MAIL_FROM",required:"true"`
-	MailUsername string `envconfig:"MAIL_USERNAME",required:"true"`
-	MailPassword string `envconfig:"MAIL_PASSWORD",required:"true"`
-	GitHubToken  string `envconfig:"GITHUB_TOKEN"`
+	EventPath           string   `envconfig:"GITHUB_EVENT_PATH" required:"true"`
+	MailHost            string   `envconfig:"MAIL_HOST" required:"true"`
+	MailPort            int      `envconfig:"MAIL_PORT" default:"587"`
+	MailFrom            string   `envconfig:"MAIL_FROM" required:"true"`
+	MailUsername        string   `envconfig:"MAIL_USERNAME" required:"true"`
+	MailPassword        string   `envconfig:"MAIL_PASSWORD" required:"true"`
+	GitHubToken         string   `envconfig:"GITHUB_TOKEN"`
+	ConclusionsToIgnore []string `envconfig:"IGNORED_CONCLUSIONS" default:"success,neutral"`
 }
 
 func SendNotification(spec Specification) {
 	event, commit, err := Parse(spec.EventPath)
 	if err != nil {
 		log.Fatalf("Failed to parse event! %s", err)
+	}
+
+	if contains(spec.ConclusionsToIgnore, *event.CheckSuite.Conclusion) {
+		fmt.Printf("No need to send email for check suite with %s conclusion!", *event.CheckSuite.Conclusion)
+		return
 	}
 
 	fmt.Printf("Dialing %v:%v...\n", spec.MailHost, spec.MailPort)

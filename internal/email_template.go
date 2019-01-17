@@ -5,4 +5,5 @@ const DefaultSubjectTemplate = `
 `
 
 const DefauleEmailMarkdownTemplate = `
+Check run [{{ .CheckRun.Name }}]({{ .CheckRun.HTMLURL }}) {{ .CheckRun.Status }} in {{ .Duration }}
 `

@@ -13,6 +13,7 @@ type Specification struct {
 	MailFrom     string `envconfig:"MAIL_FROM",required:"true"`
 	MailUsername string `envconfig:"MAIL_USERNAME",required:"true"`
 	MailPassword string `envconfig:"MAIL_PASSWORD",required:"true"`
+	GitHubToken  string `envconfig:"GITHUB_TOKEN"`
 }
 
 func SendNotification(spec Specification) {

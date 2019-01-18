@@ -1,7 +1,7 @@
 FROM golang:alpine as builder
 
-WORKDIR /tmp/action
-ADD . /tmp/action
+WORKDIR /build/action
+ADD . /build/action
 
 RUN apk add --no-cache gcc musl-dev git
 
@@ -21,6 +21,6 @@ LABEL "com.github.actions.description"="Emails check suite results upon completi
 LABEL "com.github.actions.icon"="mail"
 LABEL "com.github.actions.color"="green"
 
-COPY --from=builder /tmp/action/build/email /actions/email
+COPY --from=builder /build/action/build/email /actions/email
 
 ENTRYPOINT ["./actions/email"]

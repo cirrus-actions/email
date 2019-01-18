@@ -8,7 +8,7 @@ RUN CGO_ENABLED=0 \
     go test -v ./... && \
     go build -o build/email ./cmd/
 
-FROM scratch
+FROM alpine:latest
 
 LABEL version="1.0.0"
 LABEL repository="https://github.com/cirrus-actions/actions-trigger/"

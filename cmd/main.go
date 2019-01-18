@@ -10,7 +10,7 @@ func main() {
 	var spec internal.Specification
 	err := envconfig.Process("mail", &spec)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalf("Failed to get specification from environment variables: %v", err)
 	}
 	internal.SendNotification(spec)
 }

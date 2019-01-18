@@ -1,9 +1,11 @@
-FROM golang:stretch as builder
+FROM golang:alpine as builder
 
 WORKDIR /tmp/action
 ADD . /tmp/action
 
-RUN CGO_ENABLED=0 \
+RUN apk add --no-cache gcc musl-dev git
+
+RUN CGO_ENABLED=0 GOOS=linux \
     go get -v ./... && \
     go test -v ./... && \
     go build -o build/email ./cmd/
@@ -19,6 +21,6 @@ LABEL "com.github.actions.description"="Emails check suite results upon completi
 LABEL "com.github.actions.icon"="mail"
 LABEL "com.github.actions.color"="green"
 
-COPY --from=builder /tmp/action/build/email /bin/email
+COPY --from=builder /tmp/action/build/email /actions/email
 
-ENTRYPOINT /bin/email
+ENTRYPOINT ["./actions/email"]

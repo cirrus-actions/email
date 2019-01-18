@@ -19,6 +19,7 @@ type Specification struct {
 }
 
 func SendNotification(spec Specification) {
+	fmt.Printf("Parsing %s...", spec.EventPath)
 	event, commit, err := Parse(spec.EventPath)
 	if err != nil {
 		log.Fatalf("Failed to parse event! %s", err)

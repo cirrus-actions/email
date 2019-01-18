@@ -26,12 +26,12 @@ func SendNotification(spec Specification) {
 
 	if *event.CheckSuite.App.Name != spec.AppName {
 		fmt.Printf("No need to send email for %s app!", *event.CheckSuite.App.Name)
-		return
+		NeutralExit()
 	}
 
 	if contains(spec.ConclusionsToIgnore, *event.CheckSuite.Conclusion) {
 		fmt.Printf("No need to send email for check suite with %s conclusion!", *event.CheckSuite.Conclusion)
-		return
+		NeutralExit()
 	}
 
 	fmt.Printf("Dialing %v:%v...\n", spec.MailHost, spec.MailPort)

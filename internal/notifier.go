@@ -7,20 +7,26 @@ import (
 )
 
 type Specification struct {
+	AppName             string   `envconfig:"APP_NAME"`
+	ConclusionsToIgnore []string `envconfig:"IGNORED_CONCLUSIONS" default:"success,neutral"`
 	EventPath           string   `envconfig:"GITHUB_EVENT_PATH" required:"true"`
+	GitHubToken         string   `envconfig:"GITHUB_TOKEN"`
 	MailHost            string   `envconfig:"MAIL_HOST" required:"true"`
 	MailPort            int      `envconfig:"MAIL_PORT" default:"587"`
 	MailFrom            string   `envconfig:"MAIL_FROM" required:"true"`
 	MailUsername        string   `envconfig:"MAIL_USERNAME" required:"true"`
 	MailPassword        string   `envconfig:"MAIL_PASSWORD" required:"true"`
-	GitHubToken         string   `envconfig:"GITHUB_TOKEN"`
-	ConclusionsToIgnore []string `envconfig:"IGNORED_CONCLUSIONS" default:"success,neutral"`
 }
 
 func SendNotification(spec Specification) {
 	event, commit, err := Parse(spec.EventPath)
 	if err != nil {
 		log.Fatalf("Failed to parse event! %s", err)
+	}
+
+	if *event.CheckSuite.App.Name != spec.AppName {
+		fmt.Printf("No need to send email for %s app!", *event.CheckSuite.App.Name)
+		return
 	}
 
 	if contains(spec.ConclusionsToIgnore, *event.CheckSuite.Conclusion) {

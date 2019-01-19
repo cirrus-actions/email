@@ -22,5 +22,6 @@ LABEL "com.github.actions.icon"="mail"
 LABEL "com.github.actions.color"="green"
 
 COPY --from=builder /build/action/build/email /actions/email
+ADD entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["./actions/email"]
+ENTRYPOINT ["/entrypoint.sh"]

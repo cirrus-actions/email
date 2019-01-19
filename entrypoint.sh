@@ -5,4 +5,4 @@ set -o xtrace
 
 echo "Executing email action..."
 
-./actions/email
+./email

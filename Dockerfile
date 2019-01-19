@@ -21,7 +21,7 @@ LABEL "com.github.actions.description"="Emails check suite results upon completi
 LABEL "com.github.actions.icon"="mail"
 LABEL "com.github.actions.color"="green"
 
-COPY --from=builder /build/action/build/email /actions/email
+COPY --from=builder /build/action/build/email /email
 ADD entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

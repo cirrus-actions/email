@@ -7,6 +7,7 @@ import (
 	"github.com/google/go-github/v21/github"
 	"golang.org/x/oauth2"
 	"gopkg.in/gomail.v2"
+	"log"
 	"strings"
 	"time"
 )
@@ -16,7 +17,7 @@ func generateEmail(spec Specification, event github.CheckSuiteEvent, commit gith
 
 	message.SetAddressHeader("From", spec.MailFrom, *event.CheckSuite.App.Name)
 	message.SetAddressHeader("To", *commit.Committer.Email, *commit.Committer.Name)
-	fmt.Printf("Creating email for %v <%v>...\n", *commit.Committer.Name, *commit.Committer.Email)
+	log.Printf("Creating email for %v <%v>...\n", *commit.Committer.Name, *commit.Committer.Email)
 
 	// populate subject:
 	subject, err := Render(DefaultSubjectTemplate, event)

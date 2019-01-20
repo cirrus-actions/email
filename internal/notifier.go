@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"gopkg.in/gomail.v2"
 	"log"
 )
@@ -19,23 +18,23 @@ type Specification struct {
 }
 
 func SendNotification(spec Specification) {
-	fmt.Printf("Parsing %s...", spec.EventPath)
+	log.Printf("Parsing %s...", spec.EventPath)
 	event, commit, err := Parse(spec.EventPath)
 	if err != nil {
 		log.Fatalf("Failed to parse event! %s", err)
 	}
 
 	if *event.CheckSuite.App.Name != spec.AppName {
-		fmt.Printf("No need to send email for %s app!", *event.CheckSuite.App.Name)
+		log.Printf("No need to send email for %s app!", *event.CheckSuite.App.Name)
 		NeutralExit()
 	}
 
 	if contains(spec.ConclusionsToIgnore, *event.CheckSuite.Conclusion) {
-		fmt.Printf("No need to send email for check suite with %s conclusion!", *event.CheckSuite.Conclusion)
+		log.Printf("No need to send email for check suite with %s conclusion!", *event.CheckSuite.Conclusion)
 		NeutralExit()
 	}
 
-	fmt.Printf("Dialing %v:%v...\n", spec.MailHost, spec.MailPort)
+	log.Printf("Dialing %v:%v...\n", spec.MailHost, spec.MailPort)
 	var dialer *gomail.Dialer
 	if spec.MailUsername == "" && spec.MailPassword == "" {
 		dialer = &gomail.Dialer{Host: spec.MailHost, Port: spec.MailPort}
